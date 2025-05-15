@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>NkhaiXMhieu Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://fastly.jsdelivr.net/npm/vue@3"></script>
+  <script src="https://fastly.jsdelivr.net/npm/vant@4/lib/vant.min.js"></script>
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/vant@4/lib/index.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #0d001a;
+      color: #fff;
+    }
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      object-fit: cover;
+      opacity: 0.7; /* rõ hơn */
+    }
+    #app {
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 36px;
+      color: #a600ff;
+      text-shadow: 0 0 10px #a600ff, 0 0 20px #ff00ff;
+    }
+    .menu {
+      margin: 30px 0;
+    }
+    .menu .van-button {
+      margin: 0 10px;
+      background-color: transparent;
+      border: 2px solid #a600ff;
+      color: #fff;
+      box-shadow: 0 0 10px #a600ff;
+      transition: all 0.3s ease;
+    }
+    .menu .van-button.active {
+      background-color: #ff00ff;
+      box-shadow: 0 0 20px #ff00ff;
+    }
+    .panel {
+      margin-top: 30px;
+      padding: 20px;
+      transition: all 0.3s ease-in-out;
+    }
+    .neon-border {
+      border: 5px solid #a600ff;
+      padding: 10px;
+      box-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff;
+      animation: neonPulse 1.5s infinite alternate;
+    }
+    @keyframes neonPulse {
+      0% {
+        box-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff;
+      }
+      100% {
+        box-shadow: 0 0 25px #ff00ff, 0 0 40px #ff00ff;
+      }
+    }
+    a.link-button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      color: #fff;
+      background-color: #ff00ff;
+      text-decoration: none;
+      border-radius: 8px;
+      box-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff;
+      transition: transform 0.2s;
+    }
+    a.link-button:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <!-- Video nền -->
+  <video autoplay muted loop playsinline id="bg-video">
+    <source src="https://files.catbox.moe/3vo5lm.mp4" type="video/mp4">
+  </video>
+
+  <!-- Nhạc nền -->
+  <audio autoplay loop>
+    <source src="https://files.catbox.moe/j9y8pm.mp3" type="audio/mp3">
+  </audio>
+
+  <!-- Nội dung chính -->
+  <div id="app">
+    <h1>NkhaiXMhieu</h1>
+    <div class="menu">
+      <van-button :class="{ active: tab === 'cn' }" type="primary" @click="tab = 'cn'">Chức Năng</van-button>
+      <van-button :class="{ active: tab === 'lh' }" type="primary" @click="tab = 'lh'">Liên Hệ</van-button>
+    </div>
+    <div :class="{ 'panel': true, 'neon-border': tab === 'cn' }">
+      <div v-if="tab === 'cn'">
+        <van-button
+          v-for="btn in ['AIMLOCK', 'NHẸ TÂM', 'TĂNG NHẠY']"
+          :key="btn"
+          type="primary"
+          @click="toggleButton(btn)"
+          :style="buttonStyle(btn)"
+        >
+          {{ btn }}
+        </van-button>
+      </div>
+      <div v-else-if="tab === 'lh'">
+        <p style="color: #ff00ff; text-shadow: 0 0 10px #ff00ff;">ĐỒ CHƠI FULL ĐỎ</p>
+        <p>LIÊN HỆ: NKHAI VÀ MHIEU</p>
+        <a href="https://zaloapp.com/qr/p/1a0b4aat2r0f4" class="link-button" target="_blank">BẤM VÀO ĐỂ MUA ĐỒ</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const { createApp, ref } = Vue
+
+    createApp({
+      setup() {
+        const tab = ref('cn')
+        const buttonStates = ref({
+          'AIMLOCK': false,
+          'NHẸ TÂM': false,
+          'TĂNG NHẠY': false
+        })
+
+        const toggleButton = (button) => {
+          buttonStates.value[button] = !buttonStates.value[button]
+        }
+
+        const buttonStyle = (button) => {
+          return buttonStates.value[button]
+            ? {
+                backgroundColor: '#00ff66',
+                boxShadow: '0 0 20px #00ff66, 0 0 40px #00ff66',
+                border: '1px solid #00ff66',
+                color: '#000'
+              }
+            : {
+                backgroundColor: '#1a001f',
+                boxShadow: '0 0 8px #a600ff',
+                border: '1px solid #a600ff',
+                color: '#fff'
+              }
+        }
+
+        return { tab, toggleButton, buttonStyle }
+      }
+    }).use(vant).mount('#app')
+  </script>
+</body>
+</html>
